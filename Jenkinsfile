@@ -7,7 +7,7 @@ pipeline {
 
     // Defines environment variables that are accessible within the pipeline
     environment {
-        NETWORK = 'tldraw'  // Network name for Docker to enable networking among containers
+        NETWORK = 'ruoyi'  // Network name for Docker to enable networking among containers
         IMAGE_NAME = 'tldraw-ui'  // Name of the Docker image to be built
         WS = "${WORKSPACE}"  // Shortcut for the Jenkins workspace variable
         PROFILE = 'prod'  // Build profile, typically used to differentiate environments
