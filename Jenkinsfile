@@ -50,6 +50,9 @@ pipeline {
                 // Cleanup old containers and dangling images to prevent conflicts and save space
                 sh 'docker rm -f ${IMAGE_NAME} || true && docker rmi $(docker images -q -f dangling=true) || true'
                 
+                // Run the Docker container
+                sh "docker run -d -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME}"
+
                 // Check if the Docker network exists and connect the container if it does
                 sh '''
                 if docker network ls | grep -q ${NETWORK}; then
@@ -59,9 +62,6 @@ pipeline {
                     echo "Network ${NETWORK} does not exist"
                 fi
                 '''
-                
-                // Run the Docker container
-                sh "docker run -d -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME}"
             }
         }
     }
