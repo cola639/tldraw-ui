@@ -11,6 +11,7 @@ pipeline {
         IMAGE_NAME = 'tldraw-ui'  // Name of the Docker image to be built
         WS = "${WORKSPACE}"  // Shortcut for the Jenkins workspace variable
         PROFILE = 'prod'  // Build profile, typically used to differentiate environments
+        NGINX = 'tldraw'  // Nginx file
     }
 
     // Contains all the stages in this pipeline
@@ -51,7 +52,10 @@ pipeline {
                 sh 'docker rm -f ${IMAGE_NAME} || true && docker rmi $(docker images -q -f dangling=true) || true'
                 
                 // Run the Docker container
-                sh "docker run -d -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME}"
+                sh """
+                    docker run -d -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME} \\
+                    -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf
+                   """ 
 
                 // Check if the Docker network exists and connect the container if it does
                 sh '''
