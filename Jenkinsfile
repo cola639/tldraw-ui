@@ -16,7 +16,7 @@ pipeline {
 
     // Contains all the stages in this pipeline
     stages {
-        stage('1.Enviroment') {  // First stage: Environment Setup
+        stage('1.Environment') {  // First stage: Environment Setup
             steps {
                 sh 'pwd && ls -alh'  // Print the current working directory and list all files in detailed format
                 sh 'printenv'  // Print all the environment variables available on the Jenkins agent
@@ -46,7 +46,8 @@ pipeline {
 
         stage('4.Deploy') {  // Fourth stage: Deploy the application
             steps {
-                sh 'pwd && ls -alh'  // Debugging command to print current directory and list files
+                // Debugging command to print current directory and list files
+                sh 'pwd && ls -alh'  
 
                 // Cleanup old containers and dangling images to prevent conflicts and save space
                 sh '''
