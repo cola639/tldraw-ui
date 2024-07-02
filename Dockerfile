@@ -14,7 +14,7 @@ RUN npm install --registry=https://registry.npmmirror.com --no-fund
 COPY . .
 
 # Build the application
-RUN npm run build
+# RUN npm run build
 
 # Stage 2: Serve the application with Nginx
 FROM nginx:1.22
