@@ -11,12 +11,12 @@ pipeline {
         IMAGE_NAME = 'tldraw-ui'  // Name of the Docker image to be built
         WS = "${WORKSPACE}"  // Shortcut for the Jenkins workspace variable
         PROFILE = 'prod'  // Build profile, typically used to differentiate environments
-        NGINX = 'nginx'  // Nginx configuration file
+        NGINX = 'tldraw'  // Nginx file
     }
 
     // Contains all the stages in this pipeline
     stages {
-        stage('1.Environment') {  // First stage: Environment Setup
+        stage('1.Enviroment') {  // First stage: Environment Setup
             steps {
                 sh 'pwd && ls -alh'  // Print the current working directory and list all files in detailed format
                 sh 'printenv'  // Print all the environment variables available on the Jenkins agent
@@ -66,7 +66,7 @@ pipeline {
 
                 // Run the Docker container with network connection and volume mapping
                 sh """
-                docker run -d --network ${NETWORK} -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME} -v ${WS}/nginx.conf:/etc/nginx/nginx.conf
+                docker run -d --network ${NETWORK} -p 80 --name ${IMAGE_NAME} -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf ${IMAGE_NAME}
                 """
             }
         }
