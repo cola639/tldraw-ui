@@ -1,0 +1,18 @@
+{
+  "dashboard": "Home",
+  "profile": "Profile",
+  "files": "Files",
+  "name": "Name",
+  "owner": "Owner",
+  "editTime": "EditTime",
+  "visitorCount": "VisitorCount",
+  "share": "Share",
+  "weeklyActive": "WeeklyActive",
+  "switchLanguage": "Switch Language",
+  "switchTheme": "Switch Theme",
+  "logOut": "Log Out",
+  "clearCache": "Clear Cache",
+  "shareWebpage": "Share Webpage",
+  "error401": "Account login timeout requires re login",
+  "error403": "Permission denied"
+}

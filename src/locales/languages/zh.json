@@ -1,0 +1,16 @@
+{
+  "dashboard": "首页",
+  "profile": "简介",
+  "files": "Files",
+  "name": "Name",
+  "owner": "Owner",
+  "editTime": "EditTime",
+  "visitorCount": "访客数",
+  "share": "分享",
+  "weeklyActive": "周活跃",
+  "switchLanguage": "切换语言",
+  "switchTheme": "主题切换",
+  "logOut": "退出账号",
+  "clearCache": "清除缓存",
+  "shareWebpage": "分享网页"
+}

@@ -1,0 +1,129 @@
+.home_container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+  font-size: 12px;
+  background-color: #f6f7f8;
+  overflow: scroll;
+  padding-bottom: $bottomBar;
+
+  .head {
+    height: 65px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .banner {
+    height: 36px;
+    margin-top: 10px;
+  }
+
+  .file {
+    color: var(--color-primary);
+  }
+
+  .table {
+    margin-top: 10px;
+  }
+
+  .table_top {
+    width: 100%;
+    padding: 0 10px;
+    font-size: 13px;
+    color: #222930;
+  }
+
+  .table_top_left {
+    width: 60%;
+  }
+
+  .table_top_right {
+    width: 40%;
+  }
+
+  .table_top_owner {
+    margin-left: 10px;
+  }
+
+  .table_top_time {
+    margin-left: 25px;
+  }
+
+  .list_content {
+    padding: 8px;
+  }
+
+  .list_item {
+    position: relative;
+    width: 49%;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 13px;
+    background-color: #fefefe;
+    box-shadow: #363739 0 1px 1px;
+    margin-top: 8px;
+  }
+
+  .list_item_corner {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width: 25px;
+    height: 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+    color: #fff;
+    background: rgb(0 0 0 / 30%);
+  }
+
+  .create {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    transform: translateX(-50%);
+    fill: var(--color-primary);
+  }
+
+  .adm-list-item {
+    background-color: #f6f7f8;
+  }
+
+  .adm-search-bar-input-box {
+    border-radius: 48px !important;
+  }
+}
+.adm-mask-content {
+  position: relative;
+  top: 30%;
+  left: 50%;
+  width: 90vw;
+  border-radius: 12px;
+  background-color: #fff;
+  transform: translateX(-50%);
+}
+
+.overlay_content {
+  position: relative;
+  top: 30%;
+  left: 50%;
+  width: 90vw;
+  border-radius: 12px;
+  background-color: #fff;
+  transform: translateX(-50%);
+}

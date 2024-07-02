@@ -1,0 +1,49 @@
+.me {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: var(--color-background-primay);
+  .me_top {
+    width: 100%;
+    height: 250px;
+    font-weight: 300;
+    color: #fff;
+    background-image: url('../../assets/images/profile/bg.jpg');
+    background-size: 100% 100%;
+  }
+  .me_top_name {
+    position: absolute;
+    top: 100px;
+    width: 100vw;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #eaebef;
+  }
+
+  .me_top_bottom {
+    position: absolute;
+    top: 250px;
+    width: 100vw;
+    height: 60px;
+    font-size: 15px;
+    color: #000;
+    background-color: var(--color-background-secondary);
+  }
+  .me_middle {
+    width: 96vw;
+    height: 50px;
+    border-radius: 3px;
+    line-height: 50px;
+    color: #000;
+    margin-top: 70px;
+  }
+  .me_middle_item {
+    width: 100%;
+    height: 60px;
+    padding: 0 10px;
+    font-weight: 500;
+    color: var(--color-primary);
+    background-color: var(--color-background-secondary);
+    border-bottom: 1px solid #eaebef;
+  }
+}
