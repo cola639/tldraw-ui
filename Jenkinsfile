@@ -49,23 +49,25 @@ pipeline {
                 sh 'pwd && ls -alh'  // Debugging command to print current directory and list files
 
                 // Cleanup old containers and dangling images to prevent conflicts and save space
-                sh 'docker rm -f ${IMAGE_NAME} || true && docker rmi $(docker images -q -f dangling=true) || true'
-                
-                // Run the Docker container
-                sh """
-                    docker run -d -p 80 --name ${IMAGE_NAME} ${IMAGE_NAME} \\
-                    -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf
-                   """ 
-
-                // Check if the Docker network exists and connect the container if it does
                 sh '''
-                if docker network ls | grep -q ${NETWORK}; then
-                    echo "Connecting ${IMAGE_NAME} to ${NETWORK} network"
-                    docker network connect ${NETWORK} ${IMAGE_NAME}
+                docker rm -f ${IMAGE_NAME} || true
+                docker rmi $(docker images -q -f dangling=true) || true
+                '''
+
+                // Check if the Docker network exists and create it if it does not
+                sh '''
+                if ! docker network ls | grep -q ${NETWORK}; then
+                    echo "Creating Docker network: ${NETWORK}"
+                    docker network create ${NETWORK}
                 else
-                    echo "Network ${NETWORK} does not exist"
+                    echo "Docker network ${NETWORK} already exists"
                 fi
                 '''
+
+                // Run the Docker container with network connection and volume mapping
+                sh """
+                docker run -d --network ${NETWORK} -p 80:80 --name ${IMAGE_NAME} -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf ${IMAGE_NAME}
+                """
             }
         }
     }
