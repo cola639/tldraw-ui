@@ -5,10 +5,10 @@ FROM node:18-alpine as builder
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+# COPY package*.json ./
 
 # Install dependencies
-RUN npm install --registry=https://registry.npmmirror.com --no-fund
+# RUN npm install --registry=https://registry.npmmirror.com --no-fund
 
 # Copy the rest of the application code
 COPY . .
