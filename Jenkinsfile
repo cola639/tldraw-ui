@@ -65,7 +65,9 @@ pipeline {
                 '''
 
                 // Run the Docker container with network connection and volume mapping
-                sh 'docker run -d --network ${NETWORK} -p 80 --name ${IMAGE_NAME}'
+                sh """
+                docker run -d --network ${NETWORK} -p 80:80 --name ${IMAGE_NAME} ${IMAGE_NAME}
+                """
             }
         }
     }
