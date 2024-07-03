@@ -67,7 +67,7 @@ pipeline {
 
                 // Run the Docker container with network connection and volume mapping
                 sh """
-                docker run -d --network ${NETWORK} -p 80 --name ${IMAGE_NAME} -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf ${IMAGE_NAME}
+                docker run -d --network ${NETWORK} -p 32779:80 --name ${IMAGE_NAME} -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf ${IMAGE_NAME}
                 """
             }
         }
