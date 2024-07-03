@@ -10,7 +10,7 @@ import { useYjsStore } from './useYjsStore';
 
 // const HOST_URL = import.meta.env.MODE === 'development' ? 'ws://148.135.43.239:1235' : 'ws://148.135.43.239:1235';
 
-const HOST_URL = 'ws://http://148.135.43.239:1235';
+const HOST_URL = 'ws://148.135.43.239:1235';
 export const usePermissionAndStore = (roomId) => {
   const [store, setStore] = useState(undefined);
   const [hasPermission, setHasPermission] = useState(false);
