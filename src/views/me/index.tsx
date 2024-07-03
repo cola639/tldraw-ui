@@ -116,7 +116,7 @@ const index: FC<Iindex> = () => {
   const handleCache = () => {
     clearLocalStorageExcept(['token']);
     toast.success('🦄 Clear cache success!', {
-      position: 'top-left',
+      position: 'top-center',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -141,9 +141,6 @@ const index: FC<Iindex> = () => {
           theme: 'colored',
           transition: Bounce
         });
-        setTimeout(() => {
-          location.href = '/';
-        }, 1000);
       } catch (error) {
         toast.error('Logout Failed!', {
           position: 'top-center',

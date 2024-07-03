@@ -17,7 +17,9 @@ const AuthGuard = ({ children }: GuardProps) => {
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     }
   }, [token]);
 
