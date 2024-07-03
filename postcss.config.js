@@ -15,7 +15,7 @@ module.exports = {
       mediaQuery: true,
       replace: true,
       landscape: false,
-      exclude: [/node_modules/] // 使用正则表达式排除 node_modules 文件夹
+      exclude: [/node_modules/, /src\/tldraw/, /src\/components\/button/] // 使用正则表达式排除 node_modules 文件夹
     }
   }
 };

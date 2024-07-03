@@ -1,4 +1,5 @@
 import { joinByUUID } from 'apis/tldraw';
+import Button from 'components/button';
 import useDynamicCSS from 'hooks/useDynamicCSS';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +47,7 @@ export const usePermissionAndStore = (roomId) => {
 };
 
 export default function YjsExample() {
+  useDynamicCSS('/normalize.css', true);
   const { roomId } = paramToObj();
   const store = usePermissionAndStore(roomId);
 
@@ -64,37 +66,19 @@ export default function YjsExample() {
 }
 
 const NameEditor = track(() => {
+  const editor = useEditor();
   const navigate = useNavigate();
   const handleBackHome = () => {
     navigate('/');
   };
 
-  const editor = useEditor();
-
   const { color, name } = editor.user.getUserPreferences();
-  useDynamicCSS('/normalize.css', true);
-  // useEffect(() => {
-  //   // 获取并移除 normalize.css 的 link 元素
-  //   const linkElement = document.querySelector('link[href*="normalize.css"]');
-  //   console.log('🚀 >> useEffect >> linkElement:', linkElement);
-  //   if (linkElement) {
-  //     linkElement.parentNode.removeChild(linkElement);
-  //   }
-
-  //   return () => {
-  //     // 返回清理函数，用于恢复 normalize.css
-  //     const newLinkElement = document.createElement('link');
-  //     newLinkElement.rel = 'stylesheet';
-  //     newLinkElement.href = '/normalize.css';
-  //     document.head.appendChild(newLinkElement);
-  //   };
-  // }, []);
 
   return (
     <div style={{ pointerEvents: 'all', display: 'flex' }}>
-      <button className="mr10" onClick={handleBackHome}>
-        GoBack
-      </button>
+      <Button className="ml5 mr10" onClick={handleBackHome}>
+        {'< GoBack'}
+      </Button>
 
       <input
         type="color"
