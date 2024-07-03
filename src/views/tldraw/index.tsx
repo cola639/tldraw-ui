@@ -9,18 +9,16 @@ import { paramToObj } from 'utils';
 import TldrawStyle from './tldrawStyle';
 import { useYjsStore } from './useYjsStore';
 
-// const HOST_URL = import.meta.env.MODE === 'development' ? 'ws://148.135.43.239:1235' : 'ws://148.135.43.239:1235';
-
-const HOST_URL = 'ws://148.135.43.239:1235';
-export const usePermissionAndStore = (roomId) => {
-  const [store, setStore] = useState(undefined);
+export default function YjsExample() {
+  useDynamicCSS('/normalize.css', true);
+  const HOST_URL = 'ws://148.135.43.239:1235';
+  const { roomId } = paramToObj();
   const [hasPermission, setHasPermission] = useState(false);
   const navigate = useNavigate();
-  const storeInstance = useYjsStore({
+  const store = useYjsStore({
     roomId,
     hostUrl: HOST_URL
   });
-
   useEffect(() => {
     const checkPermission = async () => {
       try {
@@ -36,33 +34,22 @@ export const usePermissionAndStore = (roomId) => {
     checkPermission();
   }, [roomId]);
 
-  useEffect(() => {
-    // 加载完成 设置store
-    if (hasPermission && storeInstance.status !== 'loading') {
-      setStore(storeInstance);
-    }
-  }, [storeInstance]);
-
-  return store;
-};
-
-export default function YjsExample() {
-  useDynamicCSS('/normalize.css', true);
-  const { roomId } = paramToObj();
-  const store = usePermissionAndStore(roomId);
-
-  return (
-    <div className="tldraw__editor">
-      <TldrawStyle />
-      <Tldraw
-        autoFocus
-        store={store}
-        components={{
-          SharePanel: NameEditor
-        }}
-      />
-    </div>
-  );
+  if (!hasPermission) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <div className="tldraw__editor">
+        <TldrawStyle />
+        <Tldraw
+          autoFocus
+          store={store}
+          components={{
+            SharePanel: NameEditor
+          }}
+        />
+      </div>
+    );
+  }
 }
 
 const NameEditor = track(() => {
