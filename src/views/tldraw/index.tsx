@@ -1,4 +1,4 @@
-import { joinByUUID } from 'apis/tldraw';
+import { joinByUUIDApi } from 'apis/tldraw';
 import Button from 'components/button';
 import useDynamicCSS from 'hooks/useDynamicCSS';
 import { useEffect, useState } from 'react';
@@ -22,7 +22,7 @@ export default function YjsExample() {
   useEffect(() => {
     const checkPermission = async () => {
       try {
-        await joinByUUID(roomId);
+        await joinByUUIDApi(roomId);
         setHasPermission(true);
       } catch (error) {
         setTimeout(() => {

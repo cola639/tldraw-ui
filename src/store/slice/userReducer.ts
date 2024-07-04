@@ -58,6 +58,18 @@ export function loginUser(data) {
   });
 }
 
+/** async await 写法 */
+// export async function loginUser(data: any): Promise<void> {
+//   try {
+//     const res = await loginApi(data);
+//     console.log('🚀 >> .then >> res:', res);
+//     const { token } = res as any;
+//     dispatch(setUser(token));
+//   } catch (error) {
+//     return Promise.reject(error);
+//   }
+// }
+
 export function getUserInfo() {
   return new Promise<void>((resolve, reject) => {
     getUserInfoApi()

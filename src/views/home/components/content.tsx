@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Selector, Stepper, Switch, TextArea } from 'antd-mobile';
-import { generateRoom } from 'apis/tldraw';
+import { generateRoomApi } from 'apis/tldraw';
 
 import copy from 'copy-to-clipboard';
 import { FC, useEffect, useState } from 'react';
@@ -12,7 +12,6 @@ interface Icontent {
 }
 
 const content: FC<Icontent> = ({ onCloseMask }) => {
-  const [name, setName] = useState('content');
   const [formInstance] = Form.useForm(); // 创建表单实例
   const navigate = useNavigate();
 
@@ -30,15 +29,15 @@ const content: FC<Icontent> = ({ onCloseMask }) => {
       status: data.status ? '1' : '0'
     };
 
-    const res = (await generateRoom(data)) as any;
+    const res = (await generateRoomApi(data)) as any;
     console.log('🚀 >> onFinish >> res:', res);
-    onGenerateRoom(res.data.title, res.tempRoomNum, res.data.roomId);
+    ongenerateRoomApi(res.data.title, res.tempRoomNum, res.data.roomId);
   };
-  const onGenerateRoom = (title: string, tempRoomNum: string, roomId: string) => {
+  const ongenerateRoomApi = (title: string, tempRoomNum: string, roomId: string) => {
     Modal.alert({
       title: '房间创建成功！',
       content: (
-        <>
+        <div className="plr5">
           <div>房间名：{title}</div>
           <div className="flex-space-between">
             房间号: {tempRoomNum}
@@ -46,7 +45,7 @@ const content: FC<Icontent> = ({ onCloseMask }) => {
               复制房间号
             </Button>
           </div>
-        </>
+        </div>
       ),
       confirmText: '加入房间',
       onConfirm: () => joinRoom(roomId)
@@ -90,7 +89,7 @@ const content: FC<Icontent> = ({ onCloseMask }) => {
       }
     >
       <Form.Item name="title" label="房间名" rules={[{ required: true, message: '房间名不能为空' }]}>
-        <Input onChange={(value) => onTitleChange(value)} placeholder="请输入房间名" />
+        <Input onChange={(value) => onTitleChange(value)} placeholder="请输入房间名" autoFocus />
       </Form.Item>
 
       <Form.Item name="status" label="是否公开" childElementPosition="right">

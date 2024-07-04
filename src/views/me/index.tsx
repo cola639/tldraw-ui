@@ -21,6 +21,7 @@ import styles from './index.module.scss';
 const index: FC<Iindex> = () => {
   const language = useSelector((state) => state.lang.language);
   const themeType = useSelector((state) => state.theme.themeType);
+  const { nickName, avatar } = useSelector((state) => state.user.userInfo) as any;
   const operations = [
     {
       icon: ThemeIcon,
@@ -48,7 +49,6 @@ const index: FC<Iindex> = () => {
       action: 'logout'
     }
   ];
-  const [name, setName] = useState('admin123');
 
   useEffect(() => {
     return () => {};
@@ -168,7 +168,7 @@ const index: FC<Iindex> = () => {
   return (
     <div className={`${styles.me}`}>
       <div className={`box-shadow ${styles.me_top}`}>
-        <div className={`${styles.me_top_name}`}>你好，{name}！</div>
+        <div className={`${styles.me_top_name}`}>你好，{nickName}！</div>
 
         <div className={`flex-space-around ${styles.me_top_bottom}`}>
           <div className={`flex-column text-warning ${styles.mtb_item}`}>
@@ -208,7 +208,7 @@ const index: FC<Iindex> = () => {
             >
               <div className={`flex-space-around`}>
                 <IconComponent className="icon-mini" />
-                <span className="ml8">{item.text}</span>
+                <span className="ml8 pointer">{item.text}</span>
               </div>
               <div className={styles.mmi_right}>{'>'}</div>
             </div>

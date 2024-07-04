@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Selector, Stepper, Switch, TextArea } from 'antd-mobile';
-import { generateRoom, getUUID } from 'apis/tldraw';
+import { generateRoomApi, getUUIDApi } from 'apis/tldraw';
 
 import copy from 'copy-to-clipboard';
 import { FC, useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ const cooperation: FC<ICooperation> = ({ onCloseMask }) => {
     data = {
       roomNum: data.roomNum
     };
-    const res = (await getUUID(data)) as any;
+    const res = (await getUUIDApi(data)) as any;
     console.log('🚀 >> onFinish >> res:', res.data);
     joinRoom(res.uuid);
   };

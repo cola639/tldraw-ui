@@ -1,48 +1,34 @@
-import { Button, List, Mask, Popover, SearchBar, Toast } from 'antd-mobile';
-import SwipeAction, { SwipeActionRef } from 'antd-mobile/es/components/swipe-action';
+import { List, Mask, Popover, SearchBar, Toast } from 'antd-mobile';
+import SwipeAction from 'antd-mobile/es/components/swipe-action';
+import { getTldrawApi } from 'apis/tldraw';
 import { ReactComponent as CreateIcon } from 'assets/icons/create.svg';
 import { ReactComponent as SortIcon } from 'assets/icons/sort.svg';
 import { ReactComponent as WindowIcon } from 'assets/icons/window.svg';
-import avatar from 'assets/images/profile/avatar.png';
-import { FC, useEffect, useState } from 'react';
+import avatarPng from 'assets/images/profile/avatar.png';
+import { useDebounce } from 'hooks/useDebounce';
+import { FC, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import Content from './components/content';
-
-import { getTldraw } from 'apis/tldraw';
-import { getUserInfoApi } from 'apis/user';
 import { useSelector } from 'store';
+import Content from './components/content';
 import Cooperation from './components/cooperation';
 import Item from './components/item';
 import './index.scss';
 
-interface Idashboard {}
-// 定义 Action 接口，保持 onClick 为 () => void 类型
-interface Action {
-  key: string | number;
-  text: React.ReactNode;
-  color?: string;
-  onClick?: () => void;
-}
+interface IDashboard {}
 
-const index: FC<Idashboard> = () => {
-  const { nickName } = useSelector((state) => state.user.userInfo) as any;
-  console.log('🚀 >> nickName:', nickName);
-  const [layout, setLayout] = useState('list');
-  const [roomVisible, setRoomVisible] = useState(false);
+const index: FC<IDashboard> = () => {
   const [coopVisible, setCoopVisible] = useState(false);
+  const [layout, setLayout] = useState('content');
+  const [roomVisible, setRoomVisible] = useState(false);
   const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    const getTldrawData = async () => {
-      const res = (await getTldraw()) as any;
-      console.log('🚀 >> getTldrawData >> res:', res.rows);
-      setRows(res.rows);
-    };
-
-    getTldrawData();
-
-    return () => {};
-  }, []);
+  const [searchForm, setSearchForm] = useState({
+    orderByColumn: '',
+    isAsc: 'asc'
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const { nickName, avatar } = useSelector((state) => state.user.userInfo) as any;
+  const debouncedSearchTerm = useDebounce(searchTerm, 1 * 1000);
+  const searchFormRef = useRef(searchForm);
 
   const leftActions = [
     {
@@ -58,37 +44,47 @@ const index: FC<Idashboard> = () => {
       color: 'danger'
     }
   ];
-  const actions = [
-    { key: 'createtime', text: '创建时间', onClick: () => handleDelete() },
-    { key: 'updatetime', text: '修改时间', onClick: () => handleDelete() },
-    { key: 'title', text: '标题', onClick: () => handleDelete() },
-    { key: 'ascending', text: '升序', onClick: () => handleDelete() },
-    { key: 'descending', text: '倒序', onClick: () => handleDelete() }
+  const sortActions = [
+    { key: 'createTime', text: '创建时间', onClick: () => handleSort('createTime') },
+    { key: 'updateTime', text: '修改时间', onClick: () => handleSort('updateTime') },
+    { key: 'title', text: '标题', onClick: () => handleSort('title') },
+    { key: 'ascending', text: '升序', onClick: () => handleSort('asc') },
+    { key: 'descending', text: '倒序', onClick: () => handleSort('desc') }
   ];
-
-  // 定义 fileactions 数组
-  const fileactions = [
-    { key: 'delete', text: '删除', onClick: () => handleDelete() },
-    { key: 'update', text: '修改', onClick: () => handleUpdate() },
+  const createActions = [
+    { key: 'create', text: '创建房间', onClick: () => handleCreate() },
+    { key: 'join', text: '参与协作', onClick: () => handleCooperate() }
+  ];
+  const fileActions = [
+    { key: 'delete', text: '删除', onClick: () => handleCooperate() },
+    { key: 'update', text: '修改', onClick: () => handleCooperate() },
     { key: 'share', text: '分享', onClick: () => handleShare() }
   ];
 
-  // 处理函数
-  const handleDelete = () => {
-    console.log('Delete action');
-  };
+  useEffect(() => {
+    const getTldraw = async () => {
+      const res = (await getTldrawApi()) as any;
+      console.log('🚀 >> getTldrawApiData >> res:', res.rows);
+      setRows(res.rows);
+    };
 
-  const handleUpdate = () => {
-    console.log('Update action');
-  };
+    getTldraw();
+
+    return () => {};
+  }, []);
+
+  /** 防抖函数 */
+  useEffect(() => {
+    handleSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    searchFormRef.current = searchForm;
+  }, [searchForm]);
 
   const handleShare = () => {
     console.log('Share action');
   };
-  const createactions = [
-    { key: 'create', text: '创建房间', onClick: () => handleCreate() },
-    { key: 'join', text: '参与协作', onClick: () => handleCooperate() }
-  ];
 
   const handleCreate = () => {
     setRoomVisible(true);
@@ -107,12 +103,57 @@ const index: FC<Idashboard> = () => {
     }
   };
 
-  const createRoom = async () => {};
+  const handleSearch = async (value: string) => {
+    console.log('search value ->', value);
+    const params = {
+      title: value
+    };
+    const res = (await getTldrawApi(params)) as any;
+    console.log('🚀 >> handleSearch >> res:', res.rows);
+    setRows(res.rows);
+  };
+
+  /** 处理表单 组合条件查询字段 */
+  const processForm = (type: string) => {
+    const directions = ['asc', 'desc'];
+    if (directions.includes(type)) {
+      setSearchForm((prevState) => {
+        const newForm = {
+          ...prevState,
+          isAsc: type
+        };
+        searchFormRef.current = newForm;
+        return newForm;
+      });
+    } else {
+      setSearchForm((prevState) => {
+        const newForm = {
+          ...prevState,
+          orderByColumn: type
+        };
+        searchFormRef.current = newForm;
+        return newForm;
+      });
+    }
+
+    console.log('🚀 >> handleSort searchFormRef ->', searchFormRef.current);
+  };
+
+  const handleSort = async (type: string) => {
+    processForm(type);
+    const params = { ...searchFormRef.current } as any;
+    debouncedSearchTerm && (params.title = debouncedSearchTerm);
+    const res = (await getTldrawApi(params)) as any;
+    setRows(res.rows);
+  };
 
   return (
     <div className="home_container">
       <div className="flex-space-between head">
         <SearchBar
+          onChange={(value) => setSearchTerm(value)}
+          // onBlur={(value) => debounce(handleSearch(value), 1000)}
+          // onSearch={(value) => handleSearch(value)}
           placeholder="输入标题搜索"
           style={{
             '--background': '#ffffff',
@@ -121,7 +162,7 @@ const index: FC<Idashboard> = () => {
           }}
         />
         <div className="avatar">
-          <img src={avatar} />
+          <img src={import.meta.env.VITE_BASE_API + avatar || avatarPng} />
         </div>
       </div>
 
@@ -131,7 +172,7 @@ const index: FC<Idashboard> = () => {
         </div>
         <div className="flex-center mr20 tools">
           <Popover.Menu
-            actions={actions.map((action) => ({
+            actions={sortActions.map((action) => ({
               ...action
             }))}
             trigger="click"
@@ -174,7 +215,7 @@ const index: FC<Idashboard> = () => {
             {rows.map((item, index) => (
               <div key={index} className="flex-column list_item">
                 <Popover.Menu
-                  actions={fileactions.map((action) => ({
+                  actions={fileActions.map((action) => ({
                     ...action
                   }))}
                   placement="bottom-start"
@@ -182,8 +223,8 @@ const index: FC<Idashboard> = () => {
                 >
                   <div className="pointer list_item_corner">...</div>
                 </Popover.Menu>
-                <img src={avatar} />
-                <span className="mt5">Nginx指令</span>
+                <img src={import.meta.env.VITE_BASE_API + avatar || avatarPng} />
+                <span className="mt5 list_item_title">{item.title}</span>
               </div>
             ))}
           </div>
@@ -191,7 +232,7 @@ const index: FC<Idashboard> = () => {
       </div>
 
       <Popover.Menu
-        actions={createactions.map((action) => ({
+        actions={createActions.map((action) => ({
           ...action
         }))}
         trigger="click"

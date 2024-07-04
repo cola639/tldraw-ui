@@ -1,5 +1,5 @@
 // @ts-nocheck
-export function debounce(func, wait, immediate) {
+export function debounce(func, wait, immediate?: boolean) {
   let timeout, args, context, timestamp, result;
 
   const later = function () {

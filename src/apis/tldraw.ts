@@ -1,6 +1,6 @@
 import request from 'utils/request';
 
-export function getTldraw(params?: any) {
+export function getTldrawApi(params?: any) {
   return request({
     url: '/tldraw/list',
     method: 'get',
@@ -8,7 +8,7 @@ export function getTldraw(params?: any) {
   });
 }
 
-export function generateRoom(data: any) {
+export function generateRoomApi(data: any) {
   return request({
     url: '/tldraw/generateRoom',
     method: 'post',
@@ -16,14 +16,14 @@ export function generateRoom(data: any) {
   });
 }
 
-export function joinByUUID(uuid) {
+export function joinByUUIDApi(uuid) {
   return request({
     url: `/tldraw/joinByUUID/${uuid}`,
     method: 'get'
   });
 }
 
-export function getUUID(params: any) {
+export function getUUIDApi(params: any) {
   return request({
     url: '/tldraw/getUUID',
     method: 'get',
@@ -31,7 +31,7 @@ export function getUUID(params: any) {
   });
 }
 
-export function logout() {
+export function logoutApi() {
   return request({
     url: '/user/logout',
     method: 'post'
