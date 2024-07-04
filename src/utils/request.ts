@@ -1,4 +1,4 @@
-import { Modal, Toast } from 'antd-mobile';
+import { Modal } from 'antd-mobile';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { logoutUser } from 'store/slice/userReducer';

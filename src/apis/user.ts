@@ -14,3 +14,10 @@ export function logoutApi() {
     method: 'post'
   });
 }
+
+export function getUserInfoApi() {
+  return request({
+    url: '/getInfo',
+    method: 'get'
+  });
+}

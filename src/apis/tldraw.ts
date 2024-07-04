@@ -1,5 +1,13 @@
 import request from 'utils/request';
 
+export function getTldraw(params?: any) {
+  return request({
+    url: '/tldraw/list',
+    method: 'get',
+    params
+  });
+}
+
 export function generateRoom(data: any) {
   return request({
     url: '/tldraw/generateRoom',

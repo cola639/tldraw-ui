@@ -8,11 +8,15 @@ import { FC, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Content from './components/content';
 
+import { getTldraw } from 'apis/tldraw';
+import { getUserInfoApi } from 'apis/user';
+import { useSelector } from 'store';
 import Cooperation from './components/cooperation';
 import Item from './components/item';
 import './index.scss';
 
-interface Idashboard {} // 定义 Action 接口，保持 onClick 为 () => void 类型
+interface Idashboard {}
+// 定义 Action 接口，保持 onClick 为 () => void 类型
 interface Action {
   key: string | number;
   text: React.ReactNode;
@@ -21,11 +25,25 @@ interface Action {
 }
 
 const index: FC<Idashboard> = () => {
-  const [name, setName] = useState('index');
-  const [layout, setLayout] = useState('content');
+  const { nickName } = useSelector((state) => state.user.userInfo) as any;
+  console.log('🚀 >> nickName:', nickName);
+  const [layout, setLayout] = useState('list');
   const [roomVisible, setRoomVisible] = useState(false);
   const [coopVisible, setCoopVisible] = useState(false);
-  const items = ['A', 'B', 'C', 'd', 'e', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'];
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const getTldrawData = async () => {
+      const res = (await getTldraw()) as any;
+      console.log('🚀 >> getTldrawData >> res:', res.rows);
+      setRows(res.rows);
+    };
+
+    getTldrawData();
+
+    return () => {};
+  }, []);
+
   const leftActions = [
     {
       key: 'pin',
@@ -41,11 +59,11 @@ const index: FC<Idashboard> = () => {
     }
   ];
   const actions = [
-    { key: 'createtime', text: '创建时间' },
-    { key: 'updatetime', text: '修改时间' },
-    { key: 'title', text: '标题' },
-    { key: 'ascending', text: '升序' },
-    { key: 'descending', text: '倒序' }
+    { key: 'createtime', text: '创建时间', onClick: () => handleDelete() },
+    { key: 'updatetime', text: '修改时间', onClick: () => handleDelete() },
+    { key: 'title', text: '标题', onClick: () => handleDelete() },
+    { key: 'ascending', text: '升序', onClick: () => handleDelete() },
+    { key: 'descending', text: '倒序', onClick: () => handleDelete() }
   ];
 
   // 定义 fileactions 数组
@@ -56,17 +74,17 @@ const index: FC<Idashboard> = () => {
   ];
 
   // 处理函数
-  function handleDelete() {
+  const handleDelete = () => {
     console.log('Delete action');
-  }
+  };
 
-  function handleUpdate() {
+  const handleUpdate = () => {
     console.log('Update action');
-  }
+  };
 
-  function handleShare() {
+  const handleShare = () => {
     console.log('Share action');
-  }
+  };
   const createactions = [
     { key: 'create', text: '创建房间', onClick: () => handleCreate() },
     { key: 'join', text: '参与协作', onClick: () => handleCooperate() }
@@ -80,10 +98,6 @@ const index: FC<Idashboard> = () => {
     setCoopVisible(true);
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   const handleWindow = () => {
     console.log('handleWindow');
     if (layout === 'list') {
@@ -95,14 +109,11 @@ const index: FC<Idashboard> = () => {
 
   const createRoom = async () => {};
 
-  // TODO: 验证用户是否存在房间内
-  const joinRoom = async () => {};
-
   return (
     <div className="home_container">
       <div className="flex-space-between head">
         <SearchBar
-          placeholder="请输入内容"
+          placeholder="输入标题搜索"
           style={{
             '--background': '#ffffff',
             width: '260px',
@@ -123,23 +134,22 @@ const index: FC<Idashboard> = () => {
             actions={actions.map((action) => ({
               ...action
             }))}
-            onAction={(node) => Toast.show(`选择了 ${node.text}`)}
             trigger="click"
           >
-            <SortIcon className="icon-small" />
+            <SortIcon className="pointer icon-small" />
           </Popover.Menu>
 
-          <WindowIcon className="icon-mini ml20" onClick={handleWindow} />
+          <WindowIcon className="pointer icon-mini ml20" onClick={handleWindow} />
         </div>
       </div>
 
       <div className="table">
         {layout === 'list' && (
-          <div className="flex-space-between table_top">
-            <span className="table_top_left">
-              <FormattedMessage id="name" />
-            </span>
-            <div className="flex-space-between table_top_right">
+          <>
+            <div className="flex-space-between table_top">
+              <span className="table_top_left">
+                <FormattedMessage id="name" />
+              </span>
               <span className="table_top_owner">
                 <FormattedMessage id="owner" />
               </span>
@@ -147,23 +157,21 @@ const index: FC<Idashboard> = () => {
                 <FormattedMessage id="editTime" />
               </span>
             </div>
-          </div>
-        )}
-        {layout === 'list' && (
-          <List>
-            {items.map((item, index) => (
-              <SwipeAction key={index} leftActions={leftActions} rightActions={rightActions}>
-                <List.Item>
-                  <Item />
-                </List.Item>
-              </SwipeAction>
-            ))}
-          </List>
+            <List>
+              {rows.map((item, index) => (
+                <SwipeAction key={index} leftActions={leftActions} rightActions={rightActions}>
+                  <List.Item>
+                    <Item nickName={nickName} {...item} />
+                  </List.Item>
+                </SwipeAction>
+              ))}
+            </List>
+          </>
         )}
 
         {layout === 'content' && (
           <div className="flex-space-between list_content">
-            {items.map((item, index) => (
+            {rows.map((item, index) => (
               <div key={index} className="flex-column list_item">
                 <Popover.Menu
                   actions={fileactions.map((action) => ({

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from 'store/slice/userReducer';
+import { getUserInfo, loginUser } from 'store/slice/userReducer';
 import { paramToObj } from 'utils';
 import './login.scss';
 
@@ -35,6 +35,7 @@ const Login: React.FC = () => {
     };
 
     await loginUser(data);
+    await getUserInfo();
     const { redirect } = paramToObj() as any;
     console.log('🚀 >> handleLogin >> redirect:', redirect);
     navigate(redirect || '/');

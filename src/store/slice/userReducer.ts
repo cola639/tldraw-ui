@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginApi, logoutApi } from 'apis/user';
+import { getUserInfoApi, loginApi, logoutApi } from 'apis/user';
 import { getToken, removeToken, setToken } from 'utils/auth';
 import { dispatch } from '../index';
 
 interface UserProps {
   token?: string;
   roles?: string[];
+  userInfo?: {};
   permissions?: string[];
 }
 
 const initialState: UserProps = {
   token: getToken(),
+  userInfo: {},
   roles: [],
   permissions: []
 };
@@ -24,6 +26,12 @@ const userSlice = createSlice({
       state.token = action.payload;
       setToken(action.payload);
     },
+    setUserInfo(state, action) {
+      console.log('🚀 >> setUserInfo >> action:', action);
+      // 设置用户信息
+      state.userInfo = action.payload;
+    },
+
     logout(state) {
       // 清空用户token的逻辑
       state.token = undefined;
@@ -50,6 +58,20 @@ export function loginUser(data) {
   });
 }
 
+export function getUserInfo() {
+  return new Promise<void>((resolve, reject) => {
+    getUserInfoApi()
+      .then((res) => {
+        const { user } = res as any;
+        dispatch(setUserInfo(user));
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
 export function logoutUser() {
   return new Promise<void>((resolve, reject) => {
     logoutApi()
@@ -64,4 +86,4 @@ export function logoutUser() {
 }
 
 export default userSlice.reducer;
-export const { setUser, logout } = userSlice.actions;
+export const { setUser, setUserInfo, logout } = userSlice.actions;

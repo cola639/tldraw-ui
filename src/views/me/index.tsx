@@ -1,4 +1,4 @@
-import { Modal, Toast } from 'antd-mobile';
+import { Modal } from 'antd-mobile';
 import { ReactComponent as CacheIcon } from 'assets/icons/cache.svg';
 import { ReactComponent as LogoutIcon } from 'assets/icons/logout.svg';
 import { ReactComponent as ShareIcon } from 'assets/icons/share.svg';

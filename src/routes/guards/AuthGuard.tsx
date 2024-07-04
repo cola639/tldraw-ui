@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'store';
+import { getUserInfo } from 'store/slice/userReducer';
 
 // ==============================|| AUTH GUARD ||============================== //
 type GuardProps = {
@@ -20,6 +21,8 @@ const AuthGuard = ({ children }: GuardProps) => {
       setTimeout(() => {
         navigate('/login');
       }, 1000);
+    } else {
+      getUserInfo();
     }
   }, [token]);
 

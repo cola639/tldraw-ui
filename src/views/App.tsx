@@ -1,5 +1,6 @@
 import { useThemeWatcher } from 'hooks/useThemeWatcher';
 import Locales from 'locales';
+
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

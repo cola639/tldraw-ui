@@ -1,34 +1,36 @@
-import { FC, useState, useEffect } from 'react'
-import { ReactComponent as ThinkingIcon } from 'assets/icons/thinking.svg'
-import { Ellipsis } from 'antd-mobile'
-import './item.scss'
+import { Ellipsis } from 'antd-mobile';
+import { ReactComponent as ThinkingIcon } from 'assets/icons/thinking.svg';
+import { FC, useEffect, useState } from 'react';
+import { convertToTimestamp, formatTime, momentFormatTime } from 'utils/time';
+import './item.scss';
 
-interface Iitem {}
-
-const item: FC<Iitem> = () => {
-  const [name, setName] = useState('item')
-
-  useEffect(() => {
-    return () => {}
-  }, [])
-
-  const handleClick = () => {
-    setName('item2')
-  }
-
-  return (
-    <div className="flex-start itemContainer" onClick={handleClick}>
-      <div className="flex-center itemContainer_left">
-        <ThinkingIcon className="icon-small" />
-        <div className="ellipsis ml8 itemContainer_desc">
-          Docker基本操作Docker基本操作Docker基本操作Docker基本操作
-        </div>
-      </div>
-
-      <span className="itemContainer_name">C和</span>
-      <span className="itemContainer_time">1个月前</span>
-    </div>
-  )
+interface IItem {
+  id: number;
+  roomId: string;
+  title: string;
+  nickName: string;
+  updateTime: string;
 }
 
-export default item
+const item: FC<IItem> = ({ id, roomId, title, updateTime, nickName }) => {
+  // const formattedTime = formatTime(convertToTimestamp(updateTime), '{y}-{m}-{d}');
+  const formattedTime = momentFormatTime(updateTime);
+
+  const handleClick = (id, roomId) => {
+    console.log('click', id, roomId);
+  };
+
+  return (
+    <div className="flex-start itemContainer" onClick={() => handleClick(id, roomId)}>
+      <div className="flex-start itemContainer_left">
+        <ThinkingIcon className="icon-small" />
+        <div className="ellipsis ml8 itemContainer_desc">{title}</div>
+      </div>
+
+      <span className="itemContainer_name">{nickName}</span>
+      <span className="itemContainer_time">{formattedTime}</span>
+    </div>
+  );
+};
+
+export default item;

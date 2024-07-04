@@ -16,6 +16,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    cursor: pointer;
     overflow: hidden;
     img {
       width: 100%;
@@ -33,12 +34,12 @@
   }
 
   .table {
+    width: 100%;
     margin-top: 10px;
   }
 
   .table_top {
     width: 100%;
-    padding: 0 10px;
     font-size: 13px;
     color: #222930;
   }
@@ -47,16 +48,12 @@
     width: 60%;
   }
 
-  .table_top_right {
-    width: 40%;
-  }
-
   .table_top_owner {
-    margin-left: 10px;
+    width: 20%;
   }
 
   .table_top_time {
-    margin-left: 25px;
+    width: 20%;
   }
 
   .list_content {
@@ -106,6 +103,15 @@
 
   .adm-search-bar-input-box {
     border-radius: 48px !important;
+  }
+
+  .adm-list-item-content {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  .adm-list-item-content-main {
+    width: 100%;
   }
 }
 .adm-mask-content {

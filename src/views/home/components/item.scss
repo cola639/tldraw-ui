@@ -4,13 +4,16 @@
   font-size: 13px;
 }
 .itemContainer_left {
-  width: 49%;
+  width: 60%;
 }
 
 .itemContainer_name {
   width: 20%;
-  margin-left: 10px;
 }
 .itemContainer_time {
   width: 20%;
+}
+
+.adm-list-item {
+  padding-left: 0;
 }
