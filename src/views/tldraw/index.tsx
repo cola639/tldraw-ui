@@ -64,7 +64,7 @@ const NameEditor = track(() => {
   return (
     <div style={{ pointerEvents: 'all', display: 'flex' }}>
       <Button className="ml5 mr10" onClick={handleBackHome}>
-        {'< GoBack'}
+        {'< Back'}
       </Button>
 
       <input

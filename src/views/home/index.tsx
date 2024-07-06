@@ -1,4 +1,4 @@
-import { List, Mask, Modal, Popover, SearchBar, Toast } from 'antd-mobile';
+import { DotLoading, List, Mask, Modal, Popover, SearchBar, Toast } from 'antd-mobile';
 import SwipeAction from 'antd-mobile/es/components/swipe-action';
 import { delTldrawByIdsApi, getTldrawApi } from 'apis/tldraw';
 import { ReactComponent as CreateIcon } from 'assets/icons/create.svg';
@@ -22,6 +22,7 @@ interface IDashboard {}
 const index: FC<IDashboard> = () => {
   const [coopVisible, setCoopVisible] = useState(false);
   const [layout, setLayout] = useState('content');
+  const [isReq, setIsReq] = useState(false);
   const [roomVisible, setRoomVisible] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchForm, setSearchForm] = useState({
@@ -69,9 +70,11 @@ const index: FC<IDashboard> = () => {
 
   useEffect(() => {
     const getTldraw = async () => {
+      setIsReq(true);
       const res = (await getTldrawApi()) as any;
       console.log('🚀 >> getTldrawApiData >> res:', res.rows);
       setRows(res.rows);
+      setIsReq(false);
     };
 
     getTldraw();
@@ -105,12 +108,14 @@ const index: FC<IDashboard> = () => {
   };
 
   const handleSearch = async (value: string) => {
+    setIsReq(true);
     console.log('search value ->', value);
     const params: { title?: string } = {};
     value && (params.title = value);
     const res = (await getTldrawApi(params)) as any;
     console.log('🚀 >> handleSearch >> res:', res.rows);
     setRows(res.rows);
+    setIsReq(false);
   };
 
   const handleCase = (type: string, item: any) => {
@@ -255,7 +260,13 @@ const index: FC<IDashboard> = () => {
       </div>
 
       <div className="table">
-        {layout === 'list' && (
+        {isReq && (
+          <div style={{ fontSize: 24, textAlign: 'center' }}>
+            <DotLoading />
+          </div>
+        )}
+
+        {!isReq && layout === 'list' && (
           <>
             <div className="flex-space-between table_top">
               <span className="table_top_left">
@@ -280,7 +291,7 @@ const index: FC<IDashboard> = () => {
           </>
         )}
 
-        {layout === 'content' && (
+        {!isReq && layout === 'content' && (
           <div className="flex-space-between list_content">
             {rows.map((item, index) => (
               <div key={index} className="flex-column list_item">
