@@ -5,7 +5,7 @@ import { ReactComponent as ShareIcon } from 'assets/icons/share.svg';
 import { ReactComponent as ThemeIcon } from 'assets/icons/theme.svg';
 import { ReactComponent as TranslateIcon } from 'assets/icons/translate.svg';
 import copy from 'copy-to-clipboard';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { dispatch, useSelector } from 'store';
 import { setLang } from 'store/slice/langReducer';
