@@ -72,9 +72,9 @@ const index: FC<IDashboard> = () => {
     const getTldraw = async () => {
       setIsReq(true);
       const res = (await getTldrawApi()) as any;
-      console.log('🚀 >> getTldrawApiData >> res:', res.rows);
-      setRows(res.rows);
-      setIsReq(false);
+      // console.log('🚀 >> getTldrawApiData >> res:', res.rows);
+      // setRows(res.rows);
+      // setIsReq(false);
     };
 
     getTldraw();
@@ -261,8 +261,8 @@ const index: FC<IDashboard> = () => {
 
       <div className="table">
         {isReq && (
-          <div style={{ fontSize: 24, textAlign: 'center' }}>
-            <DotLoading />
+          <div style={{ fontSize: 30, textAlign: 'center' }}>
+            <DotLoading color="#60a9f4" />
           </div>
         )}
 
