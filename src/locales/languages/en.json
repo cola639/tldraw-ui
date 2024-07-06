@@ -25,5 +25,6 @@
   "login_btn": "login",
   "login_test_account": "test",
   "modal_confirm": "confirm",
-  "modal_cancel": "cancel"
+  "modal_cancel": "cancel",
+  "login_timeout": "Account login timeout requires re login"
 }

@@ -237,7 +237,7 @@ const index: FC<IDashboard> = () => {
           }}
         />
         <div className="avatar">
-          <img src={avatar ? import.meta.env.VITE_BASE_API + avatar : avatarPng} />
+          <img src={avatar ? avatar : avatarPng} />
         </div>
       </div>
 
@@ -305,7 +305,7 @@ const index: FC<IDashboard> = () => {
                 >
                   <div className="pointer list_item_corner">...</div>
                 </Popover.Menu>
-                <img src={avatar ? import.meta.env.VITE_BASE_API + avatar : avatarPng} />
+                <img src={avatar ? avatar : avatarPng} />
                 <span className="mt5 list_item_title">{item.title}</span>
               </div>
             ))}
