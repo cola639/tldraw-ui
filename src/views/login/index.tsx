@@ -1,3 +1,4 @@
+import { DotLoading } from 'antd-mobile';
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('admin123');
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -29,16 +31,21 @@ const Login: React.FC = () => {
   };
 
   const handleLogin = async () => {
+    setIsLogin(true);
+
     const data = {
       username,
       password
     };
 
-    await loginUser(data);
-    await getUserInfo();
-    const { redirect } = paramToObj() as any;
-    console.log('🚀 >> handleLogin >> redirect:', redirect);
-    navigate(redirect || '/');
+    try {
+      await loginUser(data);
+      const { redirect } = paramToObj() as any;
+      navigate(redirect || '/');
+    } catch (error) {
+    } finally {
+      setIsLogin(false);
+    }
   };
 
   return (
@@ -140,8 +147,9 @@ const Login: React.FC = () => {
               {passwordVisible ? '隐藏密码' : '显示密码'}
             </button>
           </label>
-          <button className="login-button" onClick={handleLogin}>
-            登录
+
+          <button className="login-button" disabled={isLogin} onClick={handleLogin}>
+            {isLogin ? <DotLoading color="white" /> : '登录'}
           </button>
         </div>
         <div className="social-buttons">
