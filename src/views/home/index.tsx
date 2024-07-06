@@ -72,9 +72,9 @@ const index: FC<IDashboard> = () => {
     const getTldraw = async () => {
       setIsReq(true);
       const res = (await getTldrawApi()) as any;
-      // console.log('🚀 >> getTldrawApiData >> res:', res.rows);
-      // setRows(res.rows);
-      // setIsReq(false);
+      console.log('🚀 >> getTldrawApiData >> res:', res.rows);
+      setRows(res.rows);
+      setIsReq(false);
     };
 
     getTldraw();
