@@ -8,7 +8,7 @@ import avatarPng from 'assets/images/profile/avatar.png';
 import copy from 'copy-to-clipboard';
 import { useDebounce } from 'hooks/useDebounce';
 import { FC, useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector } from 'store';
@@ -34,6 +34,7 @@ const index: FC<IDashboard> = () => {
   const searchFormRef = useRef(searchForm);
   const initialLoad = useRef(true);
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const leftActions = [
     {
@@ -223,7 +224,7 @@ const index: FC<IDashboard> = () => {
       <div className="flex-space-between head">
         <SearchBar
           onChange={(value) => setSearchTerm(value)}
-          placeholder="输入标题搜索"
+          placeholder={intl.formatMessage({ id: 'home_placeholder', defaultMessage: 'dashboard' })}
           style={{
             '--background': '#ffffff',
             width: '260px',

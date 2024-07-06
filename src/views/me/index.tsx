@@ -6,7 +6,7 @@ import { ReactComponent as ThemeIcon } from 'assets/icons/theme.svg';
 import { ReactComponent as TranslateIcon } from 'assets/icons/translate.svg';
 import copy from 'copy-to-clipboard';
 import { FC, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { dispatch, useSelector } from 'store';
 import { setLang } from 'store/slice/langReducer';
 import { setTheme } from 'store/slice/themeReducer';
@@ -19,6 +19,7 @@ import { Bounce, toast } from 'react-toastify';
 import styles from './index.module.scss';
 
 const index: FC<Iindex> = () => {
+  const intl = useIntl();
   const language = useSelector((state) => state.lang.language);
   const themeType = useSelector((state) => state.theme.themeType);
   const { nickName, avatar } = useSelector((state) => state.user.userInfo) as any;
@@ -158,17 +159,20 @@ const index: FC<Iindex> = () => {
     };
 
     Modal.confirm({
-      title: '确认操作',
-      content: '请确认退出当前账号吗？',
+      content: intl.formatMessage({ id: 'profile_confirm', defaultMessage: 'Confirm log out?' }),
       onConfirm,
-      onCancel: () => {}
+      onCancel: () => {},
+      confirmText: intl.formatMessage({ id: 'modal_confirm', defaultMessage: 'Confirm' }),
+      cancelText: intl.formatMessage({ id: 'modal_cancel', defaultMessage: 'Cancel' })
     });
   };
 
   return (
     <div className={`${styles.me}`}>
       <div className={`box-shadow ${styles.me_top}`}>
-        <div className={`${styles.me_top_name}`}>你好，{nickName}！</div>
+        <div className={`${styles.me_top_name}`}>
+          <FormattedMessage id="profile_hello" /> ，{nickName}！
+        </div>
 
         <div className={`flex-space-around ${styles.me_top_bottom}`}>
           <div className={`flex-column text-warning ${styles.mtb_item}`}>

@@ -85,7 +85,7 @@
     "description": "Log output to import action"
   },
   "React intl FormattedMessage": {
-    "prefix": "FormattedMessage",
+    "prefix": "fmsg",
     "body": ["<FormattedMessage id='id' />"],
     "description": "Log output to react intl"
   },

@@ -6,7 +6,7 @@ interface LangProps {
 
 // initial state
 const initialState: LangProps = {
-  language: localStorage.getItem('lang') || 'en' // 默认蓝色主题
+  language: localStorage.getItem('lang') || window.navigator.language || 'en' // 默认蓝色主题
 };
 
 const langReducer = createSlice({

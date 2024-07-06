@@ -2,36 +2,41 @@ import moment from 'moment';
 // import 'moment/locale/zh-cn'; // 加载中文本地化设置
 
 // moment.locale('zh-cn'); // 设置 moment.js 使用中文
+import { store } from '../store';
 
-moment.defineLocale('zh-cn', {
-  relativeTime: {
-    future: '%s内',
+const state = store.getState();
+const language = state.lang.language;
 
-    past: '%s前',
+language == 'zh' &&
+  moment.defineLocale('zh-cn', {
+    relativeTime: {
+      future: '%s内',
 
-    s: '几秒',
+      past: '%s前',
 
-    m: '1 分钟',
+      s: '几秒',
 
-    mm: '%d 分钟',
+      m: '1 分钟',
 
-    h: '1 小时',
+      mm: '%d 分钟',
 
-    hh: '%d 小时',
+      h: '1 小时',
 
-    d: '1 天',
+      hh: '%d 小时',
 
-    dd: '%d 天',
+      d: '1 天',
 
-    M: '1 个月',
+      dd: '%d 天',
 
-    MM: '%d 个月',
+      M: '1 个月',
 
-    y: '1 年',
+      MM: '%d 个月',
 
-    yy: '%d 年'
-  }
-});
+      y: '1 年',
+
+      yy: '%d 年'
+    }
+  });
 
 /**
  * 获取当前时间戳

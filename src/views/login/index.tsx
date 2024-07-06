@@ -1,7 +1,9 @@
 import { DotLoading } from 'antd-mobile';
 import _ from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { getUserInfo, loginUser } from 'store/slice/userReducer';
 import { paramToObj } from 'utils';
 import './login.scss';
@@ -27,7 +29,7 @@ const Login: React.FC = () => {
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+    setPassword(event.target.value);
   };
 
   const handleLogin = async () => {
@@ -46,6 +48,19 @@ const Login: React.FC = () => {
     } finally {
       setIsLogin(false);
     }
+  };
+
+  const thirdLogin = (type) => {
+    toast(`🦄 ${type}!`, {
+      position: 'top-center',
+      autoClose: 300,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: 0,
+      theme: 'colored'
+    });
   };
 
   return (
@@ -144,27 +159,27 @@ const Login: React.FC = () => {
               onFocus={handlePasswordFocus}
             />
             <button className="password-button" type="button" onClick={togglePasswordVisibility}>
-              {passwordVisible ? '隐藏密码' : '显示密码'}
+              {passwordVisible ? <FormattedMessage id="login_hide_password" /> : <FormattedMessage id="login_show_password" />}
             </button>
           </label>
 
           <button className="login-button" disabled={isLogin} onClick={handleLogin}>
-            {isLogin ? <DotLoading color="white" /> : '登录'}
+            {isLogin ? <DotLoading color="white" /> : <FormattedMessage id="login_btn" />}
           </button>
         </div>
         <div className="social-buttons">
-          <div className="social">
+          <div className="social" onClick={() => thirdLogin('wechat')}>
             <div className="fa fa-wechat"></div>
           </div>
-          <div className="social">
+          <div className="social" onClick={() => thirdLogin('weibo')}>
             <div className="fa fa-weibo"></div>
           </div>
-          <div className="social">
+          <div className="social" onClick={() => thirdLogin('paw')}>
             <div className="fa fa-paw"></div>
           </div>
         </div>
         <div className="footer">
-          测试账号：{username} {password}
+          <FormattedMessage id="login_test_account" />：{username} {password}
         </div>
       </div>
     </div>
