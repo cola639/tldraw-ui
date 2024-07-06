@@ -127,23 +127,23 @@
   .adm-list-item-content-main {
     width: 100%;
   }
-}
-.adm-mask-content {
-  position: relative;
-  top: 30%;
-  left: 50%;
-  width: 90vw;
-  border-radius: 12px;
-  background-color: #fff;
-  transform: translateX(-50%);
-}
+  .adm-mask-content {
+    position: relative;
+    top: 30%;
+    left: 50%;
+    width: 90vw;
+    border-radius: 12px;
+    background-color: #fff;
+    transform: translateX(-50%);
+  }
 
-.overlay_content {
-  position: relative;
-  top: 30%;
-  left: 50%;
-  width: 90vw;
-  border-radius: 12px;
-  background-color: #fff;
-  transform: translateX(-50%);
+  .overlay_content {
+    position: relative;
+    top: 30%;
+    left: 50%;
+    width: 90vw;
+    border-radius: 12px;
+    background-color: #fff;
+    transform: translateX(-50%);
+  }
 }

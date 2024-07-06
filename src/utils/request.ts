@@ -4,6 +4,10 @@ import { toast } from 'react-toastify';
 import { logoutUser } from 'store/slice/userReducer';
 import { getToken } from './auth';
 
+const isReLogin = {
+  show: false
+};
+
 // create an axios instance
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API, // url = base url + request url
@@ -51,12 +55,15 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 401) {
         // to re login
-        Modal.alert({
-          content: 'Account login timeout requires re login',
-          onConfirm: () => {
-            logoutUser();
-          }
-        });
+        if (!isReLogin.show) {
+          isReLogin.show = true;
+          Modal.alert({
+            content: 'Account login timeout requires re login',
+            onConfirm: () => {
+              logoutUser();
+            }
+          });
+        }
       }
       if (res.code === 500) {
         toast.error(res.msg || 'Error', {

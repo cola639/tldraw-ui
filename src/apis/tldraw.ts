@@ -31,9 +31,9 @@ export function getUUIDApi(params: any) {
   });
 }
 
-export function logoutApi() {
+export function delTldrawByIdsApi(ids) {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: `/tldraw/${ids}`,
+    method: 'delete'
   });
 }

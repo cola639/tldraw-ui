@@ -1,13 +1,16 @@
-import { List, Mask, Popover, SearchBar, Toast } from 'antd-mobile';
+import { List, Mask, Modal, Popover, SearchBar, Toast } from 'antd-mobile';
 import SwipeAction from 'antd-mobile/es/components/swipe-action';
-import { getTldrawApi } from 'apis/tldraw';
+import { delTldrawByIdsApi, getTldrawApi } from 'apis/tldraw';
 import { ReactComponent as CreateIcon } from 'assets/icons/create.svg';
 import { ReactComponent as SortIcon } from 'assets/icons/sort.svg';
 import { ReactComponent as WindowIcon } from 'assets/icons/window.svg';
 import avatarPng from 'assets/images/profile/avatar.png';
+import copy from 'copy-to-clipboard';
 import { useDebounce } from 'hooks/useDebounce';
 import { FC, useEffect, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useSelector } from 'store';
 import Content from './components/content';
 import Cooperation from './components/cooperation';
@@ -29,6 +32,8 @@ const index: FC<IDashboard> = () => {
   const { nickName, avatar } = useSelector((state) => state.user.userInfo) as any;
   const debouncedSearchTerm = useDebounce(searchTerm, 1 * 1000);
   const searchFormRef = useRef(searchForm);
+  const initialLoad = useRef(true);
+  const navigate = useNavigate();
 
   const leftActions = [
     {
@@ -56,9 +61,9 @@ const index: FC<IDashboard> = () => {
     { key: 'join', text: '参与协作', onClick: () => handleCooperate() }
   ];
   const fileActions = [
-    { key: 'delete', text: '删除', onClick: () => handleCooperate() },
-    { key: 'update', text: '修改', onClick: () => handleCooperate() },
-    { key: 'share', text: '分享', onClick: () => handleShare() }
+    { key: 'delete', text: '删除' },
+    { key: 'edit', text: '修改' },
+    { key: 'share', text: '分享' }
   ];
 
   useEffect(() => {
@@ -75,17 +80,12 @@ const index: FC<IDashboard> = () => {
 
   /** 防抖函数 */
   useEffect(() => {
-    handleSearch(debouncedSearchTerm);
+    if (initialLoad.current) {
+      initialLoad.current = false;
+    } else {
+      handleSearch(debouncedSearchTerm);
+    }
   }, [debouncedSearchTerm]);
-
-  useEffect(() => {
-    searchFormRef.current = searchForm;
-  }, [searchForm]);
-
-  const handleShare = () => {
-    console.log('Share action');
-  };
-
   const handleCreate = () => {
     setRoomVisible(true);
   };
@@ -105,15 +105,86 @@ const index: FC<IDashboard> = () => {
 
   const handleSearch = async (value: string) => {
     console.log('search value ->', value);
-    const params = {
-      title: value
-    };
+    const params: { title?: string } = {};
+    value && (params.title = value);
     const res = (await getTldrawApi(params)) as any;
     console.log('🚀 >> handleSearch >> res:', res.rows);
     setRows(res.rows);
   };
 
-  /** 处理表单 组合条件查询字段 */
+  const handleCase = (type: string, item: any) => {
+    console.log('🚀 >> handleCase >> item:', item);
+    switch (type) {
+      case 'delete':
+        handleDel(item);
+        break;
+
+      case 'edit':
+        handleEdit(item.roomId);
+        break;
+
+      case 'share':
+        handleShare(item.roomId);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleDel = (item: any) => {
+    Modal.show({
+      title: '',
+      content: `是否删除【${item.title}】`,
+      closeOnAction: true,
+      actions: [
+        {
+          key: 'confirm',
+          text: '确认',
+          danger: true,
+          onClick: async () => {
+            try {
+              await delTldrawByIdsApi(item.id);
+              toast.success('Delete Succeed!', { autoClose: 500 });
+              const res = (await getTldrawApi()) as any;
+              setRows(res.rows);
+            } catch (error) {
+              toast.error('Delete Failed!', { autoClose: 500 });
+            }
+          }
+        },
+        {
+          key: 'cancel',
+          text: '取消'
+        }
+      ]
+    });
+  };
+
+  const handleEdit = (roomId: string) => {
+    navigate(`/tldraw?roomId=${roomId}`);
+  };
+
+  const handleShare = (roomId: string) => {
+    const content = `画板连结创建成功！, 进入链接：${location.href}tldraw?roomId=${roomId}`;
+    try {
+      copy(content);
+      toast.success('🦄 Copy Success!', {
+        position: 'top-center',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: 'colored'
+      });
+    } catch (error) {
+      toast.error('Copy Failed!');
+    }
+  };
+
+  /** 处理表单组合条件查询 */
   const processForm = (type: string) => {
     const directions = ['asc', 'desc'];
     if (directions.includes(type)) {
@@ -152,8 +223,6 @@ const index: FC<IDashboard> = () => {
       <div className="flex-space-between head">
         <SearchBar
           onChange={(value) => setSearchTerm(value)}
-          // onBlur={(value) => debounce(handleSearch(value), 1000)}
-          // onSearch={(value) => handleSearch(value)}
           placeholder="输入标题搜索"
           style={{
             '--background': '#ffffff',
@@ -162,7 +231,7 @@ const index: FC<IDashboard> = () => {
           }}
         />
         <div className="avatar">
-          <img src={import.meta.env.VITE_BASE_API + avatar || avatarPng} />
+          <img src={avatar ? import.meta.env.VITE_BASE_API + avatar : avatarPng} />
         </div>
       </div>
 
@@ -218,12 +287,13 @@ const index: FC<IDashboard> = () => {
                   actions={fileActions.map((action) => ({
                     ...action
                   }))}
+                  onAction={(node) => handleCase(node.key as string, item)}
                   placement="bottom-start"
                   trigger="click"
                 >
                   <div className="pointer list_item_corner">...</div>
                 </Popover.Menu>
-                <img src={import.meta.env.VITE_BASE_API + avatar || avatarPng} />
+                <img src={avatar ? import.meta.env.VITE_BASE_API + avatar : avatarPng} />
                 <span className="mt5 list_item_title">{item.title}</span>
               </div>
             ))}
