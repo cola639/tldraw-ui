@@ -1,3 +1,4 @@
+import { DotLoading, Mask } from 'antd-mobile';
 import { joinByUUIDApi, uploadCaptureApi } from 'apis/tldraw';
 import Button from 'components/button';
 import useDynamicCSS from 'hooks/useDynamicCSS';
@@ -53,6 +54,7 @@ export default function YjsExample() {
 }
 
 const NameEditor = track(() => {
+  const [visible, setVisible] = useState(false);
   const trackEvent = useUiEvents();
   const editor = useEditor();
   const exportAs = useExportAs();
@@ -70,6 +72,7 @@ const NameEditor = track(() => {
   }
   const capture = async () => {
     try {
+      setVisible(true);
       const { roomId } = paramToObj();
       let ids = editor.getSelectedShapeIds();
       if (ids.length === 0) ids = Array.from(editor.getCurrentPageShapeIds().values());
@@ -82,7 +85,10 @@ const NameEditor = track(() => {
       formData.append('roomId', roomId);
       await uploadCaptureApi(formData);
       navigate('/');
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setVisible(false);
+    }
   };
 
   const { color, name } = editor.user.getUserPreferences();
@@ -110,6 +116,12 @@ const NameEditor = track(() => {
           });
         }}
       />
+
+      <Mask visible={visible} opacity="thick">
+        <div style={{ fontSize: 30, textAlign: 'center' }}>
+          <DotLoading color="#60a9f4" />
+        </div>
+      </Mask>
     </div>
   );
 });
