@@ -294,7 +294,7 @@ const index: FC<IDashboard> = () => {
         {!isReq && layout === 'content' && (
           <div className="flex-space-between list_content">
             {rows.map((item, index) => (
-              <div key={index} className="flex-column list_item">
+              <div key={index} className="flex-column list_item" onClick={() => handleEdit(item.roomId)}>
                 <Popover.Menu
                   actions={fileActions.map((action) => ({
                     ...action
@@ -303,9 +303,11 @@ const index: FC<IDashboard> = () => {
                   placement="bottom-start"
                   trigger="click"
                 >
-                  <div className="pointer list_item_corner">...</div>
+                  <div className="pointer list_item_corner" onClick={(e) => e.stopPropagation()}>
+                    ...
+                  </div>
                 </Popover.Menu>
-                <img src={avatar ? avatar : avatarPng} />
+                <img src={item.cover ? item.cover : avatarPng} />
                 <span className="mt5 list_item_title">{item.title}</span>
               </div>
             ))}

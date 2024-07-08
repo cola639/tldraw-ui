@@ -37,3 +37,11 @@ export function delTldrawByIdsApi(ids) {
     method: 'delete'
   });
 }
+
+export function uploadCaptureApi(data) {
+  return request({
+    url: `/tldraw/cover`,
+    method: 'put',
+    data
+  });
+}

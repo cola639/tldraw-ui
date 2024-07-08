@@ -207,3 +207,17 @@ export function checkExpire(limitTime: number = 60): boolean {
   // 如果未超过限制时间，返回false
   return false;
 }
+
+/**
+ * 下载文件
+ * @param {File} file - 下载的文件对象
+ * @returns {void}
+ */
+export function downloadFile(file: File) {
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(file);
+  link.href = url;
+  link.download = file.name;
+  link.click();
+  URL.revokeObjectURL(url);
+}

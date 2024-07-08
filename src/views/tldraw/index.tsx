@@ -1,9 +1,9 @@
-import { joinByUUIDApi } from 'apis/tldraw';
+import { joinByUUIDApi, uploadCaptureApi } from 'apis/tldraw';
 import Button from 'components/button';
 import useDynamicCSS from 'hooks/useDynamicCSS';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Tldraw, track, useEditor } from 'tldraw';
+import { Editor, Tldraw, exportToBlob, track, useEditor, useExportAs, useUiEvents } from 'tldraw';
 import 'tldraw/tldraw.css';
 import { paramToObj } from 'utils';
 import TldrawStyle from './tldrawStyle';
@@ -53,10 +53,36 @@ export default function YjsExample() {
 }
 
 const NameEditor = track(() => {
+  const trackEvent = useUiEvents();
   const editor = useEditor();
+  const exportAs = useExportAs();
   const navigate = useNavigate();
   const handleBackHome = () => {
-    navigate('/');
+    capture();
+  };
+  function getExportName(editor: Editor, defaultName: string) {
+    const selectedShapes = editor.getSelectedShapes();
+    // When we don't have any shapes selected, we want to use the document name
+    if (selectedShapes.length === 0) {
+      return editor.getDocumentSettings().name || defaultName;
+    }
+    return undefined;
+  }
+  const capture = async () => {
+    try {
+      const { roomId } = paramToObj();
+      let ids = editor.getSelectedShapeIds();
+      if (ids.length === 0) ids = Array.from(editor.getCurrentPageShapeIds().values());
+      if (ids.length === 0) return navigate('/');
+
+      const blob = await exportToBlob({ editor, ids, format: 'png' });
+      const file = new File([blob], name, { type: blob.type });
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('roomId', roomId);
+      await uploadCaptureApi(formData);
+      navigate('/');
+    } catch (error) {}
   };
 
   const { color, name } = editor.user.getUserPreferences();
