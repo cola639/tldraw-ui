@@ -115,10 +115,6 @@ export function clearSessionStorageExcept(keysToKeep) {
 }
 
 /**
- * 格式化时间
- */
-
-/**
  * 根据给定的值在字典数组中查找对应的颜色。
  *
  * @param {string} value - 要查找的值。
