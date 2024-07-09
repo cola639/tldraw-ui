@@ -61,7 +61,7 @@ pipeline {
                     echo "Creating Docker network: ${NETWORK}"
                     docker network create ${NETWORK}
                 else
-                    echo "Docker network ${NETWORK} already exists"
+                    echo "INFO: Docker network ${NETWORK} already exists"
                 fi
                 '''
 
@@ -71,7 +71,7 @@ pipeline {
                     -v /www/docker/${NGINX}/public.pem:/etc/ssl/certs/public.pem \
                     -v /www/docker/${NGINX}/public-key.pem:/etc/ssl/private/public-key.pem \
                     -v /www/docker/${NGINX}/${NGINX}.conf:/etc/nginx/nginx.conf \
-                    {IMAGE_NAME}
+                    ${IMAGE_NAME}
                 """
             }
         }
