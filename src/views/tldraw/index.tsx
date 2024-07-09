@@ -12,7 +12,7 @@ import { useYjsStore } from './useYjsStore';
 
 export default function YjsExample() {
   useDynamicCSS('/normalize.css', true);
-  const HOST_URL = 'ws://148.135.43.239:1235';
+  const HOST_URL = 'wss://yws.win-gavin.top';
   const { roomId } = paramToObj();
   const [hasPermission, setHasPermission] = useState(false);
   const navigate = useNavigate();
