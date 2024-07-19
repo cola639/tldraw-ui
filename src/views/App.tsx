@@ -10,8 +10,6 @@ import VConsole from 'vconsole';
 function App() {
   useThemeWatcher();
   useEffect(() => {
-    console.error('故意报错');
-
     import.meta.env.VITE_VCONSOLE === 'open' && new VConsole();
     return () => {};
   }, []);
